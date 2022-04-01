@@ -30,9 +30,17 @@ impl AppState {
     pub fn put(&mut self, key: &String, command: &String) {
         let task = Task {
             command: command.clone(),
-            status: Status::Error("jasklasjhlsdk".to_string()),
+            status: Status::Received,
         };
         self.database.insert(key.clone(), task);
+    }
+
+    pub fn update(&mut self, key: &String, status: Status) -> Result<(), &'static str> {
+        if let Some(ref mut task) = self.database.get_mut(key) {
+            task.status = status;
+            return Ok(());
+        }
+        Err("Not found")
     }
 
     pub fn get(&self, key: &str) -> Option<&Task> {
