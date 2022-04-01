@@ -29,6 +29,7 @@ async fn main() -> std::io::Result<()> {
             .service(endpoints::get_status)
             .service(endpoints::enqueue_new_task)
             .service(endpoints::get_info)
+            .service(endpoints::get_result)
     })
     .bind(("127.0.0.1", 8000))?
     .run()

@@ -41,12 +41,13 @@ pub async fn enqueue_new_task(
 ) -> impl Responder {
     info!("Han llamado al encolado {:?}", &task);
     let payload = build_task(&task);
+
     match payload {
+        Err(e) => HttpResponse::build(StatusCode::BAD_REQUEST).body(e),
         Ok(p) => {
             let mut state = data.state.lock().unwrap();
             state.put(&p.uuid, &p.command);
             HttpResponse::build(StatusCode::ACCEPTED).json(p)
         }
-        Err(e) => HttpResponse::build(StatusCode::BAD_REQUEST).body(e),
     }
 }
